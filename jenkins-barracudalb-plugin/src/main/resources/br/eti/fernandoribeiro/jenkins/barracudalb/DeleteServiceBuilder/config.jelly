@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+	<f:entry title="API Protocol" field="apiProtocol"
+		help="/plugin/barracudalb/help-apiProtocol.html">
+		<f:textbox />
+	</f:entry>
+	<f:entry title="API IP" field="apiIp"
+		help="/plugin/barracudalb/help-apiIp.html">
+		<f:textbox />
+	</f:entry>
+	<f:entry title="API Port" field="apiPort"
+		help="/plugin/barracudalb/help-apiPort.html">
+		<f:textbox />
+	</f:entry>
+	<f:entry title="API Password" field="apiPassword"
+		help="/plugin/barracudalb/help-apiPassword.html">
+		<f:textbox />
+	</f:entry>
+	<f:entry title="Port" field="port">
+		<f:textbox />
+	</f:entry>
+	<f:entry title="Protocol" field="protocol">
+		<f:textbox />
+	</f:entry>
+	<f:entry title="VIP" field="vip">
+		<f:textbox />
+	</f:entry>
+</j:jelly>
