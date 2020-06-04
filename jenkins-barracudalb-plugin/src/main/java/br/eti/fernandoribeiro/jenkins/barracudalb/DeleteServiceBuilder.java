@@ -29,10 +29,10 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class DeleteServiceBuilder extends Builder {
+public class DeleteServiceBuilder extends Builder {
 
 	@Extension
-	public static final class DeleteServiceBuilderDescriptor extends
+	public static class DeleteServiceBuilderDescriptor extends
 			BuildStepDescriptor<Builder> {
 
 		@Override
@@ -42,7 +42,7 @@ public final class DeleteServiceBuilder extends Builder {
 
 		@Override
 		public boolean isApplicable(
-				final Class<? extends AbstractProject> jobType) {
+				Class<? extends AbstractProject> jobType) {
 			return true;
 		}
 
@@ -63,9 +63,9 @@ public final class DeleteServiceBuilder extends Builder {
 	private String vip;
 
 	@DataBoundConstructor
-	public DeleteServiceBuilder(final String apiIp, final String apiPassword,
-			final String apiPort, final String apiProtocol, final String port,
-			final String protocol, final String vip) {
+	public DeleteServiceBuilder(String apiIp, String apiPassword,
+			String apiPort, String apiProtocol, String port,
+			String protocol, String vip) {
 		this.apiIp = apiIp;
 
 		this.apiPassword = apiPassword;
@@ -82,23 +82,23 @@ public final class DeleteServiceBuilder extends Builder {
 	}
 
 	@Override
-	public boolean perform(final AbstractBuild<?, ?> build,
-			final Launcher launcher, final BuildListener listener) {
-		final PrintStream logger = listener.getLogger();
+	public boolean perform(AbstractBuild<?, ?> build,
+			Launcher launcher, BuildListener listener) {
+		PrintStream logger = listener.getLogger();
 
 		try {
 			logger.println("Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -109,13 +109,13 @@ public final class DeleteServiceBuilder extends Builder {
 			if (port != null)
 				paramMap.put("port", port);
 
-			final Map result = (Map) client.execute("service.delete",
+			Map result = (Map) client.execute("service.delete",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				logger.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			logger.println("Cannot delete service");
 		}
 

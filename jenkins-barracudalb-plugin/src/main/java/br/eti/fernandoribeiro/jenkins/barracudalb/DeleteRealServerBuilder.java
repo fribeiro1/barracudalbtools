@@ -29,10 +29,10 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class DeleteRealServerBuilder extends Builder {
+public class DeleteRealServerBuilder extends Builder {
 
 	@Extension
-	public static final class DeleteRealServerBuilderDescriptor extends
+	public static class DeleteRealServerBuilderDescriptor extends
 			BuildStepDescriptor<Builder> {
 
 		@Override
@@ -42,7 +42,7 @@ public final class DeleteRealServerBuilder extends Builder {
 
 		@Override
 		public boolean isApplicable(
-				final Class<? extends AbstractProject> jobType) {
+				Class<? extends AbstractProject> jobType) {
 			return true;
 		}
 
@@ -63,10 +63,10 @@ public final class DeleteRealServerBuilder extends Builder {
 	private String vip;
 
 	@DataBoundConstructor
-	public DeleteRealServerBuilder(final String apiIp,
-			final String apiPassword, final String apiPort,
-			final String apiProtocol, final String ip, final String port,
-			final String vip) {
+	public DeleteRealServerBuilder(String apiIp,
+			String apiPassword, String apiPort,
+			String apiProtocol, String ip, String port,
+			String vip) {
 		this.apiIp = apiIp;
 
 		this.apiPassword = apiPassword;
@@ -83,23 +83,23 @@ public final class DeleteRealServerBuilder extends Builder {
 	}
 
 	@Override
-	public boolean perform(final AbstractBuild<?, ?> build,
-			final Launcher launcher, final BuildListener listener) {
-		final PrintStream logger = listener.getLogger();
+	public boolean perform(AbstractBuild<?, ?> build,
+			Launcher launcher, BuildListener listener) {
+		PrintStream logger = listener.getLogger();
 
 		try {
 			logger.println("Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -110,13 +110,13 @@ public final class DeleteRealServerBuilder extends Builder {
 			if (port != null)
 				paramMap.put("port", port);
 
-			final Map result = (Map) client.execute("server.delete",
+			Map result = (Map) client.execute("server.delete",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				logger.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			logger.println("Cannot delete real server from service");
 		}
 

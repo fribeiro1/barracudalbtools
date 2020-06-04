@@ -30,34 +30,34 @@ import org.jboss.forge.shell.plugins.Plugin;
 @Alias("barracudalb")
 @Help("Manages services and/or real servers in the Barracuda Load Balancer")
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class LoadBalancerPlugin implements Plugin {
+public class LoadBalancerPlugin implements Plugin {
 	@Inject
 	private Shell shell;
 
 	@Command(value = "add-real-server", help = "Adds a real server to a service")
 	public void addRealServer(
-			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") final String apiProtocol,
-			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") final String apiIp,
-			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") final String apiPort,
-			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") final String apiPassword,
-			@Option(name = "vip", help = "The VIP address used by the service") final String vip,
-			@Option(name = "ip", help = "The IP address used by the real server") final String ip,
-			@Option(name = "port", help = "The port used by the real server") final String port) {
+			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") String apiProtocol,
+			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") String apiIp,
+			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") String apiPort,
+			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") String apiPassword,
+			@Option(name = "vip", help = "The VIP address used by the service") String vip,
+			@Option(name = "ip", help = "The IP address used by the real server") String ip,
+			@Option(name = "port", help = "The port used by the real server") String port) {
 
 		try {
 			ShellMessages
 					.info(shell, "Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -68,13 +68,13 @@ public final class LoadBalancerPlugin implements Plugin {
 			if (port != null)
 				paramMap.put("port", port);
 
-			final Map result = (Map) client.execute("server.add",
+			Map result = (Map) client.execute("server.add",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				shell.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ShellMessages.error(shell, "Cannot add real server to service");
 		}
 
@@ -82,30 +82,30 @@ public final class LoadBalancerPlugin implements Plugin {
 
 	@Command(value = "add-service", help = "Adds a service")
 	public void addService(
-			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") final String apiProtocol,
-			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") final String apiIp,
-			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") final String apiPort,
-			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") final String apiPassword,
-			@Option(name = "name", help = "The name of the service") final String name,
-			@Option(name = "vip", help = "The VIP address used by the service") final String vip,
-			@Option(name = "protocol", help = "The protocol used by the service") final String protocol,
-			@Option(name = "port", help = "The port used by the service") final String port,
-			@Option(name = "type", help = "The type of the service") final String type) {
+			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") String apiProtocol,
+			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") String apiIp,
+			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") String apiPort,
+			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") String apiPassword,
+			@Option(name = "name", help = "The name of the service") String name,
+			@Option(name = "vip", help = "The VIP address used by the service") String vip,
+			@Option(name = "protocol", help = "The protocol used by the service") String protocol,
+			@Option(name = "port", help = "The port used by the service") String port,
+			@Option(name = "type", help = "The type of the service") String type) {
 
 		try {
 			ShellMessages
 					.info(shell, "Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (name != null)
 				paramMap.put("name", name);
@@ -122,13 +122,13 @@ public final class LoadBalancerPlugin implements Plugin {
 			if (type != null)
 				paramMap.put("type", type);
 
-			final Map result = (Map) client.execute("service.add",
+			Map result = (Map) client.execute("service.add",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				shell.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ShellMessages.error(shell, "Cannot add service");
 		}
 
@@ -136,29 +136,29 @@ public final class LoadBalancerPlugin implements Plugin {
 
 	@Command(value = "change-real-server-state", help = "Changes the state of a real server")
 	public void changeRealServerState(
-			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") final String apiProtocol,
-			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") final String apiIp,
-			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") final String apiPort,
-			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") final String apiPassword,
-			@Option(name = "vip", help = "The VIP address used by the service") final String vip,
-			@Option(name = "ip", help = "The IP address used by the real server") final String ip,
-			@Option(name = "port", help = "The port used by the real server") final String port,
-			@Option(name = "action", help = "The action to perform") final String action) {
+			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") String apiProtocol,
+			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") String apiIp,
+			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") String apiPort,
+			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") String apiPassword,
+			@Option(name = "vip", help = "The VIP address used by the service") String vip,
+			@Option(name = "ip", help = "The IP address used by the real server") String ip,
+			@Option(name = "port", help = "The port used by the real server") String port,
+			@Option(name = "action", help = "The action to perform") String action) {
 
 		try {
 			ShellMessages
 					.info(shell, "Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -172,13 +172,13 @@ public final class LoadBalancerPlugin implements Plugin {
 			if (action != null)
 				paramMap.put("action", action);
 
-			final Map result = (Map) client.execute("server.change_state",
+			Map result = (Map) client.execute("server.change_state",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				shell.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ShellMessages.error(shell, "Cannot change state of real server");
 		}
 
@@ -186,28 +186,28 @@ public final class LoadBalancerPlugin implements Plugin {
 
 	@Command(value = "delete-real-server", help = "Deletes a real server from a service")
 	public void deleteRealServer(
-			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") final String apiProtocol,
-			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") final String apiIp,
-			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") final String apiPort,
-			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") final String apiPassword,
-			@Option(name = "vip", help = "The VIP address used by the service") final String vip,
-			@Option(name = "ip", help = "The IP address used by the real server") final String ip,
-			@Option(name = "port", help = "The port used by the real server") final String port) {
+			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") String apiProtocol,
+			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") String apiIp,
+			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") String apiPort,
+			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") String apiPassword,
+			@Option(name = "vip", help = "The VIP address used by the service") String vip,
+			@Option(name = "ip", help = "The IP address used by the real server") String ip,
+			@Option(name = "port", help = "The port used by the real server") String port) {
 
 		try {
 			ShellMessages
 					.info(shell, "Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -218,13 +218,13 @@ public final class LoadBalancerPlugin implements Plugin {
 			if (port != null)
 				paramMap.put("port", port);
 
-			final Map result = (Map) client.execute("server.delete",
+			Map result = (Map) client.execute("server.delete",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				shell.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ShellMessages
 					.error(shell, "Cannot delete real server from service");
 		}
@@ -233,28 +233,28 @@ public final class LoadBalancerPlugin implements Plugin {
 
 	@Command(value = "delete-service", help = "Deletes a service")
 	public void deleteService(
-			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") final String apiProtocol,
-			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") final String apiIp,
-			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") final String apiPort,
-			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") final String apiPassword,
-			@Option(name = "vip", help = "The VIP address used by the service") final String vip,
-			@Option(name = "protocol", help = "The protocol used by the service") final String protocol,
-			@Option(name = "port", help = "The port used by the service") final String port) {
+			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") String apiProtocol,
+			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") String apiIp,
+			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") String apiPort,
+			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") String apiPassword,
+			@Option(name = "vip", help = "The VIP address used by the service") String vip,
+			@Option(name = "protocol", help = "The protocol used by the service") String protocol,
+			@Option(name = "port", help = "The port used by the service") String port) {
 
 		try {
 			ShellMessages
 					.info(shell, "Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -265,13 +265,13 @@ public final class LoadBalancerPlugin implements Plugin {
 			if (port != null)
 				paramMap.put("port", port);
 
-			final Map result = (Map) client.execute("service.delete",
+			Map result = (Map) client.execute("service.delete",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				shell.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ShellMessages.error(shell, "Cannot delete service");
 		}
 
@@ -279,29 +279,29 @@ public final class LoadBalancerPlugin implements Plugin {
 
 	@Command(value = "show-service", help = "Shows information for a service and/or real server")
 	public void showService(
-			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") final String apiProtocol,
-			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") final String apiIp,
-			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") final String apiPort,
-			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") final String apiPassword,
-			@Option(name = "vip", help = "The VIP address used by the service") final String vip,
-			@Option(name = "ip", help = "The IP address used by the real server") final String ip,
-			@Option(name = "port", help = "The port used by the real server") final String port,
-			@Option(name = "show", required = true, help = "A list of the information to show") final String show) {
+			@Option(name = "apiProtocol", defaultValue = "http", help = "The protocol for the Barracuda Load Balancer API") String apiProtocol,
+			@Option(name = "apiIp", required = true, help = "The IP address for the Barracuda Load Balancer API") String apiIp,
+			@Option(name = "apiPort", defaultValue = "8000", help = "The port for the Barracuda Load Balancer API") String apiPort,
+			@Option(name = "apiPassword", required = true, help = "The password for the Barracuda Load Balancer API") String apiPassword,
+			@Option(name = "vip", help = "The VIP address used by the service") String vip,
+			@Option(name = "ip", help = "The IP address used by the real server") String ip,
+			@Option(name = "port", help = "The port used by the real server") String port,
+			@Option(name = "show", required = true, help = "A list of the information to show") String show) {
 
 		try {
 			ShellMessages
 					.info(shell, "Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -314,13 +314,13 @@ public final class LoadBalancerPlugin implements Plugin {
 
 			paramMap.put("show", show);
 
-			final Map result = (Map) client.execute("service.show",
+			Map result = (Map) client.execute("service.show",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				shell.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			ShellMessages.error(shell,
 					"Cannot show information for service and/or real server");
 		}

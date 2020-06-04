@@ -28,7 +28,7 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
  */
 @Mojo(name = "add-real-server")
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class AddRealServerMojo extends AbstractMojo {
+public class AddRealServerMojo extends AbstractMojo {
 	/**
 	 * The IP address for the Barracuda Load Balancer API
 	 */
@@ -76,16 +76,16 @@ public final class AddRealServerMojo extends AbstractMojo {
 		try {
 			getLog().info("Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -96,13 +96,13 @@ public final class AddRealServerMojo extends AbstractMojo {
 			if (port != null)
 				paramMap.put("port", port);
 
-			final Map result = (Map) client.execute("server.add",
+			Map result = (Map) client.execute("server.add",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				out.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			getLog().error("Cannot add real server to service", e);
 		}
 

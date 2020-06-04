@@ -29,10 +29,10 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class AddServiceBuilder extends Builder {
+public class AddServiceBuilder extends Builder {
 
 	@Extension
-	public static final class AddRealServerBuilderDescriptor extends
+	public static class AddRealServerBuilderDescriptor extends
 			BuildStepDescriptor<Builder> {
 
 		@Override
@@ -42,7 +42,7 @@ public final class AddServiceBuilder extends Builder {
 
 		@Override
 		public boolean isApplicable(
-				final Class<? extends AbstractProject> jobType) {
+				Class<? extends AbstractProject> jobType) {
 			return true;
 		}
 
@@ -67,10 +67,10 @@ public final class AddServiceBuilder extends Builder {
 	private String vip;
 
 	@DataBoundConstructor
-	public AddServiceBuilder(final String apiIp, final String apiPassword,
-			final String apiPort, final String apiProtocol, final String name,
-			final String port, final String protocol, final String type,
-			final String vip) {
+	public AddServiceBuilder(String apiIp, String apiPassword,
+			String apiPort, String apiProtocol, String name,
+			String port, String protocol, String type,
+			String vip) {
 		this.apiIp = apiIp;
 
 		this.apiPassword = apiPassword;
@@ -91,23 +91,23 @@ public final class AddServiceBuilder extends Builder {
 	}
 
 	@Override
-	public boolean perform(final AbstractBuild<?, ?> build,
-			final Launcher launcher, final BuildListener listener) {
-		final PrintStream logger = listener.getLogger();
+	public boolean perform(AbstractBuild<?, ?> build,
+			Launcher launcher, BuildListener listener) {
+		PrintStream logger = listener.getLogger();
 
 		try {
 			logger.println("Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (name != null)
 				paramMap.put("name", name);
@@ -124,13 +124,13 @@ public final class AddServiceBuilder extends Builder {
 			if (type != null)
 				paramMap.put("type", type);
 
-			final Map result = (Map) client.execute("service.add",
+			Map result = (Map) client.execute("service.add",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				logger.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			logger.println("Cannot add service");
 		}
 

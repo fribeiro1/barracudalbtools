@@ -29,10 +29,10 @@ import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 @SuppressWarnings({ "rawtypes", "unchecked" })
-public final class ChangeRealServerStateBuilder extends Builder {
+public class ChangeRealServerStateBuilder extends Builder {
 
 	@Extension
-	public static final class ChangeRealServerStateBuilderDescriptor extends
+	public static class ChangeRealServerStateBuilderDescriptor extends
 			BuildStepDescriptor<Builder> {
 
 		@Override
@@ -42,7 +42,7 @@ public final class ChangeRealServerStateBuilder extends Builder {
 
 		@Override
 		public boolean isApplicable(
-				final Class<? extends AbstractProject> jobType) {
+				Class<? extends AbstractProject> jobType) {
 			return true;
 		}
 
@@ -65,10 +65,10 @@ public final class ChangeRealServerStateBuilder extends Builder {
 	private String vip;
 
 	@DataBoundConstructor
-	public ChangeRealServerStateBuilder(final String apiIp,
-			final String apiPassword, final String apiPort,
-			final String apiProtocol, final String action, final String ip,
-			final String port, final String vip) {
+	public ChangeRealServerStateBuilder(String apiIp,
+			String apiPassword, String apiPort,
+			String apiProtocol, String action, String ip,
+			String port, String vip) {
 		this.apiIp = apiIp;
 
 		this.apiPassword = apiPassword;
@@ -87,23 +87,23 @@ public final class ChangeRealServerStateBuilder extends Builder {
 	}
 
 	@Override
-	public boolean perform(final AbstractBuild<?, ?> build,
-			final Launcher launcher, final BuildListener listener) {
-		final PrintStream logger = listener.getLogger();
+	public boolean perform(AbstractBuild<?, ?> build,
+			Launcher launcher, BuildListener listener) {
+		PrintStream logger = listener.getLogger();
 
 		try {
 			logger.println("Calling the Barracuda Load Balancer API");
 
-			final XmlRpcClient client = new XmlRpcClient();
+			XmlRpcClient client = new XmlRpcClient();
 
-			final XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
+			XmlRpcClientConfigImpl config = new XmlRpcClientConfigImpl();
 
 			config.setServerURL(new URL(apiProtocol + "://" + apiIp + ":"
 					+ apiPort + "/cgi-mod/api.cgi?password=" + apiPassword));
 
 			client.setConfig(config);
 
-			final Map paramMap = new HashMap();
+			Map paramMap = new HashMap();
 
 			if (vip != null)
 				paramMap.put("vip", vip);
@@ -117,13 +117,13 @@ public final class ChangeRealServerStateBuilder extends Builder {
 			if (action != null)
 				paramMap.put("action", action);
 
-			final Map result = (Map) client.execute("server.change_state",
+			Map result = (Map) client.execute("server.change_state",
 					new Object[] { paramMap });
 
-			for (final Object key : result.keySet())
+			for (Object key : result.keySet())
 				logger.println(key + " = " + result.get(key));
 
-		} catch (final Exception e) {
+		} catch (Exception e) {
 			logger.println("Cannot change state of real server");
 		}
 
